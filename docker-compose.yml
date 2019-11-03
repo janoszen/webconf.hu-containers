@@ -1,0 +1,15 @@
+---
+version: '3.2'
+services:
+  traefik:
+    build: traefik
+    image: webconf/traefik
+  nginx:
+    build: nginx
+    image: webconf/nginx
+  php:
+    build: php
+    image: webconf/php
+  backup:
+    build: backup
+    image: webconf/backup

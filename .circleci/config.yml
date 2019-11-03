@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run: docker-compose build
+      - run: |
+          echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run: docker-compose push
+workflows:
+  version: 2
+  push:
+    jobs:
+      - build:
+          context: webconf
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
+  timed:
+    jobs:
+      - build:
+          context: webconf
+          filters:
+            branches:
+              only: master
+            tags:
+              ignore: /.*/
+    triggers:
+      - schedule:
+          cron: "0 6 * * *"
+          filters:
+            branches:
+              only:
+                - master
