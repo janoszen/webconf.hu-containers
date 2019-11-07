@@ -4,7 +4,7 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: VERSION=${CIRCLE_BRANCH}-SNAPSHOT docker-compose build --parallel
+      - run: VERSION=${CIRCLE_BRANCH}-SNAPSHOT docker-compose build
       - run: |
           echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: VERSION=${CIRCLE_BRANCH}-SNAPSHOT docker-compose push
@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
       - run:
-          command: VERSION=${CIRCLE_TAG} docker-compose build --parallel
+          command: VERSION=${CIRCLE_TAG} docker-compose build
       - run: |
           echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run: VERSION=${CIRCLE_TAG} docker-compose push
