@@ -6,7 +6,7 @@ ARG TRAEFIK_UID
 RUN apk upgrade --no-cache && rm -fR /etc/periodic
 RUN apk add --no-cache bash python3 ca-certificates tzdata curl \
     && pip3 install s3cmd \
-    && rm -fR /etc/periodic`
+    && rm -fR /etc/periodic
 
 RUN mkdir -p /srv/acme
 
