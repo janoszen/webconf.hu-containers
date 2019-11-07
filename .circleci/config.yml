@@ -54,7 +54,7 @@ workflows:
     triggers:
       - schedule:
           cron: "0 6 * * *"
-          filter:
+          filters:
             branches:
               only: /.*/
             tags:
