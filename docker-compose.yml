@@ -3,13 +3,13 @@ version: '3.2'
 services:
   traefik:
     build: traefik
-    image: webconf/traefik
+    image: weberthu/webconf.hu-traefik
   nginx:
     build: nginx
-    image: webconf/nginx
+    image: weberthu/webconf.hu-nginx
   php:
     build: php
-    image: webconf/php
+    image: weberthu/webconf.hu-php
   backup:
     build: backup
-    image: webconf/backup
+    image: weberthu/webconf.hu-backup
