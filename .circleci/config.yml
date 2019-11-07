@@ -1,37 +1,56 @@
 version: 2
 jobs:
-  build:
+  build-branch:
     machine: true
     steps:
       - checkout
-      - run: docker-compose build
+      - run: VERSION=${CIRCLE_BRANCH}-SNAPSHOT docker-compose build --parallel
       - run: |
           echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-      - run: docker-compose push
+      - run: VERSION=${CIRCLE_BRANCH}-SNAPSHOT docker-compose push
+  build-tag:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          command: VERSION=${CIRCLE_TAG} docker-compose build --parallel
+      - run: |
+          echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+      - run: VERSION=${CIRCLE_TAG} docker-compose push
 workflows:
   version: 2
   push:
     jobs:
-      - build:
+      - build-branch:
           context: webconf
           filters:
             branches:
-              only: master
+              only: /.*/
             tags:
               ignore: /.*/
+      - build-tag:
+          context: webconf
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
   timed:
     jobs:
-      - build:
+      - build-branch:
           context: webconf
           filters:
             branches:
-              only: master
+              only: /.*/
             tags:
               ignore: /.*/
+      - build-tag:
+          context: webconf
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
     triggers:
       - schedule:
           cron: "0 6 * * *"
-          filters:
-            branches:
-              only:
-                - master
